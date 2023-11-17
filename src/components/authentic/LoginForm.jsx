@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __loginUser } from "../../redux/modules/userReducer";
 import styled from "styled-components";
@@ -7,7 +7,6 @@ import FormInput from "./FormInput";
 import { checkRegex } from "../../common/checkRegex";
 import AlertMessage from "./AlertMessage";
 import { Link, useNavigate } from "react-router-dom";
-import { setCookieToken } from "../../storage/Cookie";
 
 const initialErrorData = {
   id: "",
@@ -22,7 +21,6 @@ const initialFormData = {
 const Form = () => {
   const [errorData, setErrorData] = useState(initialErrorData);
   const [formData, setFormData] = useState(initialFormData);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userReducer);
 
@@ -42,13 +40,6 @@ const Form = () => {
         __loginUser({ id: formData["id"], password: formData["password"] })
       );
   };
-
-  useEffect(() => {
-    if (users.authenticated) {
-      setCookieToken(users.accessToken);
-      navigate("/");
-    }
-  }, [users.authenticated, navigate, users.accessToken]);
 
   return (
     <Base>

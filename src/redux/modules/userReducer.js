@@ -1,24 +1,36 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../axios/api";
-
-export const TOKEN_TIME_OUT = 60 * 60 * 1000;
+import { push } from "redux-first-history";
+import { removeCookieUser, setCookieUser } from "../../storage/Cookie";
 
 const initialState = {
-  user: [],
-  authenticated: false,
-  accessToken: null,
-  expireTime: null,
+  isAuthenticated: false,
   isLoading: false,
-  isSuccess: false,
   error: null,
 };
+
+export const __getUser = createAsyncThunk(
+  "getUser",
+  async (payload, thunkApi) => {
+    try {
+      const headers = {
+        authorization: `Bearer ${payload}`,
+      };
+      await api.get("user", { headers });
+      return thunkApi.fulfillWithValue();
+    } catch (error) {
+      thunkApi.dispatch(push("/login"));
+      return thunkApi.rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 export const __loginUser = createAsyncThunk(
   "loginUser",
   async (payload, thunkApi) => {
     try {
       const response = await api.post("login", payload);
-
+      thunkApi.dispatch(push("/"));
       return thunkApi.fulfillWithValue({
         user: payload,
         token: response.data.token,
@@ -34,6 +46,7 @@ export const __registerUser = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       const response = await api.post("register", payload);
+      thunkApi.dispatch(push("/login"));
       return thunkApi.fulfillWithValue(response);
     } catch (error) {
       return thunkApi.rejectWithValue(error.response.data.message);
@@ -51,27 +64,35 @@ const userSlice = createSlice({
         error: null,
       };
     },
-    logoutUser: (state, action) => {
+    logoutUser: () => {
       return {
-        user: [],
-        authenticated: false,
-        accessToken: null,
-        expireTime: null,
+        isAuthenticated: false,
         isLoading: false,
         error: null,
       };
     },
   },
   extraReducers: {
+    [__getUser.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [__getUser.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.isAuthenticated = true;
+    },
+    [__getUser.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.isAuthenticated = false;
+      state.error = action.payload;
+      removeCookieUser();
+    },
     [__loginUser.pending]: (state) => {
       state.isLoading = true;
     },
     [__loginUser.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.user = action.payload.user;
-      state.authenticated = true;
-      state.accessToken = action.payload.token;
-      state.expireTime = new Date().getTime() + TOKEN_TIME_OUT;
+      state.isAuthenticated = true;
+      setCookieUser(action.payload.token, action.payload.user.id);
     },
     [__loginUser.rejected]: (state, action) => {
       state.isLoading = false;

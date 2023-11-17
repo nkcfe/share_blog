@@ -46,7 +46,7 @@ const Li = styled.li`
   }
 `;
 
-const Dropdown = ({ children, onClickLogout }) => {
+const Dropdown = ({ children, onClickLogout, handleToggleModal }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpenSelect = () => {
@@ -66,7 +66,7 @@ const Dropdown = ({ children, onClickLogout }) => {
         unmountOnExit
       >
         <Ul>
-          <Li>프로필 설정</Li>
+          <Li onClick={handleToggleModal}>프로필 설정</Li>
           <Li onClick={() => onClickLogout()}>로그아웃</Li>
         </Ul>
       </CSSTransition>

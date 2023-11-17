@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { IoMdTime } from "react-icons/io";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentDots } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 const CoverImg = styled.div`
   width: 200px;
@@ -96,8 +97,7 @@ const AuthorName = styled.div`
 `;
 
 const ArticleCard = ({ article, modalToggle }) => {
-  const { author, date, comments, title, text, liked, coverImg } = article;
-  console.log(comments.length);
+  const { author, date, title, text, liked, coverImg } = article;
 
   return (
     <Base onClick={() => modalToggle(article.id)}>
@@ -114,7 +114,7 @@ const ArticleCard = ({ article, modalToggle }) => {
           </InfoBox>
           <InfoBox>
             <FaRegCommentDots />
-            {comments.length}
+            {/* {comments.length} */}
           </InfoBox>
         </InfoWrapper>
       </Header>

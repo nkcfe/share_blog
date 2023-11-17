@@ -8,15 +8,13 @@ import Detail from "../pages/Detail";
 
 const Router = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/post" element={<Post />} />
-        <Route path="/detail" element={<Detail />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/post" element={<Post />} />
+      <Route path="/detail" element={<Detail />} />
+    </Routes>
   );
 };
 

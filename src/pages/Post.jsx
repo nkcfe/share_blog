@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import PostHeader from "../components/post/PostHeader";
 import PostBody from "../components/post/PostBody";
+import { useDispatch } from "react-redux";
+import { __getUser } from "../redux/modules/userReducer";
+import { getCookieUser } from "../storage/Cookie";
 
 const Base = styled.div`
   display: flex;
@@ -15,16 +15,12 @@ const Base = styled.div`
 `;
 
 const Post = () => {
-  const [cookies] = useCookies(["JWTToken"]);
-  const navigate = useNavigate();
-
+  // 쿠키에서 토큰을 가져와 서버에 토큰 인증 시작
+  // 오류일 경우 reducer에서 로그인페이지로 강제 이동 및 쿠키 삭제
+  const dispatch = useDispatch();
   useEffect(() => {
-    // 쿠키가 사라졌으면 로그인 페이지로 이동
-    if (!cookies.JWTToken) {
-      alert("유효기간이 만료되었습니다. 다시 로그인해주세요.");
-      navigate("/login");
-    }
-  }, [cookies.JWTToken, navigate]);
+    dispatch(__getUser(getCookieUser().token));
+  }, [dispatch]);
   return (
     <Base>
       <PostBody />

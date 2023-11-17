@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import Button from "../common/Button";
 import { MdDeleteOutline } from "react-icons/md";
@@ -7,6 +7,8 @@ import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { CiCalendar } from "react-icons/ci";
 import Comment from "./Comment";
 import CommentInput from "./CommentInput";
+import { useDispatch, useSelector } from "react-redux";
+import { __getComments } from "../../redux/modules/commentReducer";
 
 const Base = styled.div`
   border-radius: 8px;
@@ -81,8 +83,13 @@ const CommentBody = styled.div`
 `;
 
 const DetailModal = ({ article, modalToggle }) => {
-  const { id, author, date, comments, title, text, liked, coverImg } = article;
+  const { id, author, date, title, text, liked, coverImg } = article;
+  const comments = useSelector((state) => state.commentReducer.comments);
+
   const bottomRef = useRef(null);
+  useEffect(() => {
+    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [comments]);
   return (
     <Base>
       <Navbar>
@@ -123,9 +130,11 @@ const DetailModal = ({ article, modalToggle }) => {
         </Header>
       </ArticleBody>
       <CommentBody>
-        {comments.map((comment) => (
-          <Comment key={comment.key} comment={comment} />
-        ))}
+        {comments
+          .filter((comment) => id === comment.articleId)
+          .map((comment) => (
+            <Comment key={comment.key} comment={comment} />
+          ))}
         <div ref={bottomRef}></div>
       </CommentBody>
       <CommentInput article={article} bottomRef={bottomRef} />

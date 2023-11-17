@@ -45,12 +45,6 @@ const Form = () => {
       );
   };
 
-  useEffect(() => {
-    if (users.isSuccess) {
-      navigate("/login");
-    }
-  }, [users.isSuccess, navigate]);
-
   return (
     <Base>
       {users.error && <AlertMessage errorMsg={users.error} />}

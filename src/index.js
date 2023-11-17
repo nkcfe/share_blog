@@ -5,15 +5,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyle from "./styles/GlobalStyle";
 import { Provider } from "react-redux";
-import store from "./redux/config/configStore";
+import { store, history } from "./redux/config/configStore";
 import { CookiesProvider } from "react-cookie";
+import { HistoryRouter as Router } from "redux-first-history/rr6";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <CookiesProvider>
     <Provider store={store}>
-      <GlobalStyle />
-      <App />
+      <Router history={history}>
+        <GlobalStyle />
+        <App />
+      </Router>
     </Provider>
   </CookiesProvider>
 );

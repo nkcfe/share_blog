@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ArticleCard from "./ArticleCard";
 import Modal from "../Modal";
 import DetailModal from "./DetailModal";
+import { __getArticles } from "../../redux/modules/articleReducer";
 
 const Base = styled.div`
   margin-top: 60px;
@@ -15,11 +16,9 @@ const Base = styled.div`
 const CardWrapper = styled.div``;
 
 const ArticleList = () => {
-  const articles = useSelector((state) => state.articleReducer);
-
+  const articles = useSelector((state) => state.articleReducer.articles);
+  console.log(articles);
   const [isModalOpen, setIsModalOpen] = useState({});
-
-  console.log(isModalOpen);
 
   const handleModalToggle = (articleId) => {
     setIsModalOpen((prevStates) => ({

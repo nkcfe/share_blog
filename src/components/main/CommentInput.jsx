@@ -1,11 +1,15 @@
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AiOutlineSend } from "react-icons/ai";
 import useInput from "../customhook/useInput";
-import { useDispatch, useSelector } from "react-redux";
-import { createComment } from "../../redux/modules/articleReducer";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { getToday } from "../../functions/common";
+import { getCookieUser } from "../../storage/Cookie";
+import {
+  __getComments,
+  __postComment,
+} from "../../redux/modules/commentReducer";
 
 const Base = styled.div`
   position: sticky;
@@ -42,24 +46,40 @@ const SubmitBtn = styled.div`
 
 const CommentInput = ({ article, bottomRef }) => {
   const { id } = article;
-  const [inputValue, setInputValue, onChangeInputValutHandler] = useInput();
+  const [inputValue, setInputValue] = useState();
 
-  const users = useSelector((state) => state.userReducer);
-  console.log(users.user.id);
+  const onChangeInputValutHandler = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const { userId } = getCookieUser();
+
   const dispatch = useDispatch();
 
-  const onClickSubmit = () => {
+  const onClickSubmit = async () => {
     const newComment = {
+      articleId: id,
       id: uuidv4(),
-      author: users.user.id,
+      author: userId,
       text: inputValue,
       liked: 0,
       date: getToday(),
     };
-    dispatch(createComment({ comment: newComment, id: id }));
+
+    // Dispatch post comment action and wait for it to complete
+    await dispatch(__postComment(newComment));
+
+    // Clear input after successful comment post
     setInputValue("");
-    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+
+    // Dispatch get comments action
+    dispatch(__getComments());
+
+    // Scroll to the bottom
+    
   };
+
+  
   return (
     <Base>
       <Input value={inputValue} onChange={onChangeInputValutHandler} />

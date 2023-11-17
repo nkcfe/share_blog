@@ -8,6 +8,8 @@ import { removeCookieToken } from "../../storage/Cookie";
 import Dropdown from "../common/Dropdown";
 import Button from "../common/Button";
 import { BiLogoBlogger } from "react-icons/bi";
+import Modal from "../Modal";
+import ProfileModal from "../post/ProfileModal";
 
 const Base = styled.div`
   position: sticky;
@@ -40,12 +42,15 @@ const Menu = styled.div`
 
 const Navbar = () => {
   const navagate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleToggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   const onClickLogout = () => {
     logoutUser();
-    removeCookieToken();
     navagate("/login");
-    window.location.reload();
   };
   return (
     <Base>
@@ -58,9 +63,15 @@ const Navbar = () => {
             <BsPencil />
             글쓰기
           </Button>
-          <Dropdown onClickLogout={onClickLogout}>
+          <Dropdown
+            onClickLogout={onClickLogout}
+            handleToggleModal={handleToggleModal}
+          >
             <AiOutlineUser />
           </Dropdown>
+          <Modal isOpen={isModalOpen} onClose={handleToggleModal}>
+            <ProfileModal handleToggleModal={handleToggleModal} />
+          </Modal>
         </Menu>
       </NavContainer>
     </Base>

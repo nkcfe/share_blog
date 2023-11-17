@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import Navbar from "../components/main/Navbar";
-import { getCookieToken } from "../storage/Cookie";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+
 import styled from "styled-components";
 import ArticleList from "../components/main/ArticleList";
+import { useDispatch } from "react-redux";
+import { __getUser } from "../redux/modules/userReducer";
+import { getCookieUser } from "../storage/Cookie";
+import { __getArticles } from "../redux/modules/articleReducer";
+import { __getComments } from "../redux/modules/commentReducer";
 
 const Base = styled.div`
   display: flex;
@@ -14,16 +17,15 @@ const Base = styled.div`
 `;
 
 const Home = () => {
-  const [cookies] = useCookies(["JWTToken"]);
-  const navigate = useNavigate();
-
+  // 쿠키에서 토큰을 가져와 서버에 토큰 인증 시작
+  // 오류일 경우 reducer에서 로그인페이지로 강제 이동 및 쿠키 삭제
+  const dispatch = useDispatch();
   useEffect(() => {
-    // 쿠키가 사라졌으면 로그인 페이지로 이동
-    if (!cookies.JWTToken) {
-      alert("유효기간이 만료되었습니다. 다시 로그인해주세요.");
-      navigate("/login");
-    }
-  }, [cookies.JWTToken, navigate]);
+    dispatch(__getUser(getCookieUser().token));
+    dispatch(__getArticles());
+    dispatch(__getComments());
+  }, [dispatch]);
+
   return (
     <Base>
       <Navbar />
