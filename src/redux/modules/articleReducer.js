@@ -13,7 +13,7 @@ export const __getArticles = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       const { data } = await axios.get(
-        "https://sharethink-eae116f481b4.herokuapp.com/articles"
+        `${process.env.REACT_APP_JSON_SERVER}/articles`
       );
       return thunkApi.fulfillWithValue(data);
     } catch (error) {
@@ -27,7 +27,7 @@ export const __postArticle = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       await axios.post(
-        "https://sharethink-eae116f481b4.herokuapp.com/articles",
+        `${process.env.REACT_APP_JSON_SERVER}/articles`,
         payload
       );
     } catch (error) {
@@ -41,7 +41,7 @@ export const __deleteArticle = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       await axios.delete(
-        `https://sharethink-eae116f481b4.herokuapp.com/articles/${payload}`
+        `${process.env.REACT_APP_JSON_SERVER}/articles/${payload}`
       );
       thunkApi.dispatch(push("/"));
     } catch (error) {
@@ -55,7 +55,7 @@ export const __patchArticle = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       await axios.patch(
-        `https://sharethink-eae116f481b4.herokuapp.com/articles/${payload.id}`,
+        `${process.env.REACT_APP_JSON_SERVER}articles/${payload.id}`,
         payload.editArticle
       );
     } catch (error) {}

@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from "uuid";
 import Modal from "../Modal";
 import ConfirmModal from "./ConfirmModal";
 import { getCookieUser } from "../../storage/Cookie";
-import { __postArticle } from "../../redux/modules/articleReducer";
 
 const PostHeader = ({ titleValue, textValue, coverImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,7 +35,6 @@ const PostHeader = ({ titleValue, textValue, coverImage }) => {
       heart: 0,
       coverImg: coverImage,
     };
-    console.log(newArticle);
     handleModalToggle();
     // dispatch(__postArticle(newArticle));
   };

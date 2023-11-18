@@ -12,7 +12,7 @@ export const __getComments = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       const response = await axios.get(
-        "https://sharethink-eae116f481b4.herokuapp.com/comments"
+        `${process.env.REACT_APP_JSON_SERVER}/comments`
       );
 
       return thunkApi.fulfillWithValue(response.data);
@@ -27,7 +27,7 @@ export const __postComment = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       await axios.post(
-        "https://sharethink-eae116f481b4.herokuapp.com/comments",
+        `${process.env.REACT_APP_JSON_SERVER}/comments`,
         payload
       );
     } catch (error) {
@@ -41,7 +41,7 @@ export const __deleteComment = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       await axios.delete(
-        `https://sharethink-eae116f481b4.herokuapp.com/comments/${payload}`
+        `${process.env.REACT_APP_JSON_SERVER}/comments/${payload}`
       );
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -54,7 +54,7 @@ export const __patchComment = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       await axios.patch(
-        `https://sharethink-eae116f481b4.herokuapp.com/comments/${payload.id}`,
+        `${process.env.REACT_APP_JSON_SERVER}/comments/${payload.id}`,
         payload.editComment
       );
     } catch (error) {}

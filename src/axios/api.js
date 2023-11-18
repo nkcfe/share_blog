@@ -1,11 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://3.38.191.164",
-  // withCredentials: true,
+  baseURL: process.env.REACT_APP_AUTH_SERVER,
 });
 
 export default instance;
-
-// refresh token
-// session

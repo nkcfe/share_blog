@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const ThemeButton = ({ handleModeChange, isLightMode }) => {
-  console.log(isLightMode);
   return (
     <Base isLightMode={isLightMode} onClick={handleModeChange}>
       <Circle isLightMode={isLightMode} />
