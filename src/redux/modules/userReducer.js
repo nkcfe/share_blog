@@ -6,6 +6,7 @@ import { removeCookieUser, setCookieUser } from "../../storage/Cookie";
 const initialState = {
   isAuthenticated: false,
   isLoading: false,
+  isSuccess: false,
   error: null,
 };
 
@@ -30,7 +31,9 @@ export const __loginUser = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       const response = await api.post("login", payload);
-      thunkApi.dispatch(push("/"));
+      setTimeout(() => {
+        thunkApi.dispatch(push("/"));
+      }, 3000);
       return thunkApi.fulfillWithValue({
         user: payload,
         token: response.data.token,
@@ -46,7 +49,9 @@ export const __registerUser = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       const response = await api.post("register", payload);
-      thunkApi.dispatch(push("/login"));
+      setTimeout(() => {
+        thunkApi.dispatch(push("/login"));
+      }, 3000);
       return thunkApi.fulfillWithValue(response);
     } catch (error) {
       return thunkApi.rejectWithValue(error.response.data.message);
@@ -64,10 +69,17 @@ const userSlice = createSlice({
         error: null,
       };
     },
+    clearSuccess: (state, action) => {
+      return {
+        ...state,
+        isSuccess: false,
+      };
+    },
     logoutUser: () => {
       return {
         isAuthenticated: false,
         isLoading: false,
+        isSuccess: false,
         error: null,
       };
     },
@@ -75,37 +87,50 @@ const userSlice = createSlice({
   extraReducers: {
     [__getUser.pending]: (state, action) => {
       state.isLoading = true;
+      state.isSuccess = false;
     },
     [__getUser.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.isAuthenticated = true;
+      state.isSuccess = true;
     },
     [__getUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.isAuthenticated = false;
+      state.isSuccess = false;
       state.error = action.payload;
       removeCookieUser();
     },
     [__loginUser.pending]: (state) => {
       state.isLoading = true;
+      state.isSuccess = false;
     },
     [__loginUser.fulfilled]: (state, action) => {
       state.isLoading = false;
+      state.isSuccess = true;
       state.isAuthenticated = true;
       setCookieUser(action.payload.token, action.payload.user.id);
     },
     [__loginUser.rejected]: (state, action) => {
       state.isLoading = false;
+      state.isSuccess = false;
       state.error = action.payload;
     },
+    [__registerUser.pending]: (state, action) => {
+      state.isLoading = true;
+      state.isSuccess = false;
+    },
     [__registerUser.fulfilled]: (state, action) => {
+      state.isLoading = false;
       state.isSuccess = true;
     },
     [__registerUser.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = false;
       state.error = action.payload;
     },
   },
 });
 
-export const { clearError, logoutUser } = userSlice.actions;
+export const { clearError, logoutUser, clearSuccess } = userSlice.actions;
 export default userSlice.reducer;

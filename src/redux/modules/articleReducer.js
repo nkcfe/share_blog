@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { push } from "redux-first-history";
 
 const initialState = {
   articles: [],
@@ -14,8 +15,6 @@ export const __getArticles = createAsyncThunk(
       const { data } = await axios.get(
         "https://sharethink-eae116f481b4.herokuapp.com/articles"
       );
-      console.log(data);
-
       return thunkApi.fulfillWithValue(data);
     } catch (error) {
       return thunkApi.rejectWithValue();
@@ -34,6 +33,32 @@ export const __postArticle = createAsyncThunk(
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
+  }
+);
+
+export const __deleteArticle = createAsyncThunk(
+  "deleteArticle",
+  async (payload, thunkApi) => {
+    try {
+      await axios.delete(
+        `https://sharethink-eae116f481b4.herokuapp.com/articles/${payload}`
+      );
+      thunkApi.dispatch(push("/"));
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const __patchArticle = createAsyncThunk(
+  "patchArticle",
+  async (payload, thunkApi) => {
+    try {
+      await axios.patch(
+        `https://sharethink-eae116f481b4.herokuapp.com/articles/${payload.id}`,
+        payload.editArticle
+      );
+    } catch (error) {}
   }
 );
 
@@ -61,6 +86,15 @@ const articleSlice = createSlice({
     [__postArticle.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    [__deleteArticle.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__deleteArticle.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    [__deleteArticle.rejected]: (state) => {
+      state.isLoading = false;
     },
   },
 });

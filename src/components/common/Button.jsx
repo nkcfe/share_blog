@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-const CustomButton = styled.button`
+const CustomButton = styled.div`
   ${({ color }) =>
     color === "light"
       ? css`
@@ -41,6 +41,14 @@ const CustomButton = styled.button`
           color: #fff;
           &: hover {
             background: #be2e3c;
+          }
+        `
+      : color === "purple"
+      ? css`
+          background: #8873ef;
+          color: #fff;
+          &: hover {
+            background: #7765d3;
           }
         `
       : null}
@@ -99,19 +107,23 @@ const CustomButton = styled.button`
       : css`
           border: none;
         `}
-
-  
+    
+  display:flex;
+  justify-content: center;
+  align-items: center;
   font-size: ${({ fontSize }) => fontSize};
   font-weight: bold;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   margin: ${({ margin }) => margin};
   cursor: pointer;
-  display: inline-flex;
+
+  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
   padding: ${({ padding }) => (padding ? padding : "8px")};
+  position: relative;
 
   svg {
     display: flex;

@@ -1,22 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  svg {
-    font-size: 20px;
-    color: #7a7471;
-  }
-  &:hover {
-    box-shadow: 0 9px 9px rgba(0, 0, 0, 0.2);
-  }
-`;
-
 const EditButton = (props) => {
   return (
     <Button
@@ -33,3 +17,19 @@ const EditButton = (props) => {
 };
 
 export default EditButton;
+
+const Button = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  svg {
+    font-size: 20px;
+    color: #7a7471;
+  }
+  &:hover {
+    box-shadow: 0 9px 9px rgba(0, 0, 0, 0.2);
+  }
+`;

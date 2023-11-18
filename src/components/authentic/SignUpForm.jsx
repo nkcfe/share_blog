@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __registerUser } from "../../redux/modules/userReducer";
 import styled from "styled-components";
@@ -6,7 +6,8 @@ import Button from "../common/Button";
 import FormInput from "./FormInput";
 import { checkRegex } from "../../common/checkRegex";
 import AlertMessage from "./AlertMessage";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { MoonLoader } from "react-spinners";
 
 const initialErrorData = {
   id: "",
@@ -23,7 +24,6 @@ const initialFormData = {
 const Form = () => {
   const [errorData, setErrorData] = useState(initialErrorData);
   const [formData, setFormData] = useState(initialFormData);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userReducer);
 
@@ -47,7 +47,13 @@ const Form = () => {
 
   return (
     <Base>
-      {users.error && <AlertMessage errorMsg={users.error} />}
+      {users.isSuccess && (
+        <AlertMessage
+          Msg="회원가입이 성공하였습니다. 로그인 페이지로 이동합니다."
+          type="success"
+        />
+      )}
+      {users.error && <AlertMessage Msg={users.error} />}
       <Title>환영합니다</Title>
       <SubTitle>회원 정보를 입력해주세요.</SubTitle>
       <FormContainer>
@@ -83,10 +89,14 @@ const Form = () => {
           width="100%"
           height="50px"
           onClick={handleSubmit}
-          color="primary"
+          color="purple"
           fontSize="16px"
         >
-          회원가입
+          {users.isLoading ? (
+            <MoonLoader size={20} color="#fff" />
+          ) : (
+            <span>회원가입</span>
+          )}
         </Button>
         <LinktoSignup>
           이미 회원이신가요?{" "}
@@ -104,7 +114,7 @@ export default Form;
 const Base = styled.div`
   position: absolute;
   left: 50%;
-  top: 25%;
+  top: 30%;
   transform: translate(-50%, -25%);
   display: flex;
   flex-direction: column;
@@ -116,13 +126,13 @@ const Base = styled.div`
 const Title = styled.div`
   font-size: 26px;
   font-weight: bold;
-  color: ${({ theme }) => theme.color.fontColor};
+  color: ${({ theme }) => theme.color.font};
 `;
 
 const SubTitle = styled.div`
   font-size: 14px;
   font-weight: bold;
-  color: ${({ theme }) => theme.color.subFontColor};
+  color: ${({ theme }) => theme.color.subFont};
   margin-top: 15px;
 `;
 
@@ -137,6 +147,7 @@ const FormContainer = styled.form`
 const LinktoSignup = styled.div`
   margin-top: 15px;
   font-size: 14px;
+  color: ${({ theme }) => theme.color.font};
   span {
     font-size: 15px;
     font-weight: bold;

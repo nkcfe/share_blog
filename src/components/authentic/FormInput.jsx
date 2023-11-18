@@ -77,11 +77,11 @@ const Base = styled.div`
     position: absolute;
     top: 41px;
     right: 15px;
-
+    color: ${({ theme }) => theme.color.font};
     font-size: 18px;
     cursor: pointer;
     &:hover {
-      color: #50546d;
+      color: ${({ theme }) => theme.color.font};
     }
   }
 `;
@@ -91,7 +91,9 @@ const Input = styled.input`
   width: 100%;
   height: 50px;
   outline: none;
-  border: 1px solid ${({ theme }) => theme.color.borderColor};
+  background: ${({ theme }) => theme.color.subBg};
+  border: 1px solid ${({ theme }) => theme.color.border};
+  color: ${({ theme }) => theme.color.font};
   border-radius: 5px;
   padding: 15px;
   &:focus {
@@ -101,14 +103,15 @@ const Input = styled.input`
 
 const PlaceHolder = styled.div`
   position: absolute;
-  color: ${({ theme }) => theme.color.subFontColor};
-  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.font};
+  background-color: ${({ theme }) => theme.color.subBg};
   border-radius: 50px;
   padding: 5px;
   ${({ focus }) =>
     focus
       ? css`
-          font-size: 12px;
+          font-size: 13px;
+          font-weight: bold;
           color: ${({ theme }) => theme.color.point};
           top: 13px;
           left: 13px;

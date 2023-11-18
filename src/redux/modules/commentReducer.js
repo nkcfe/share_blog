@@ -36,6 +36,31 @@ export const __postComment = createAsyncThunk(
   }
 );
 
+export const __deleteComment = createAsyncThunk(
+  "deleteComment",
+  async (payload, thunkApi) => {
+    try {
+      await axios.delete(
+        `https://sharethink-eae116f481b4.herokuapp.com/comments/${payload}`
+      );
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+
+export const __patchComment = createAsyncThunk(
+  "patchComment",
+  async (payload, thunkApi) => {
+    try {
+      await axios.patch(
+        `https://sharethink-eae116f481b4.herokuapp.com/comments/${payload.id}`,
+        payload.editComment
+      );
+    } catch (error) {}
+  }
+);
+
 const commentSlice = createSlice({
   name: "comments",
   initialState,
@@ -61,6 +86,15 @@ const commentSlice = createSlice({
     [__postComment.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    [__deleteComment.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__deleteComment.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    [__deleteComment.rejected]: (state) => {
+      state.isLoading = false;
     },
   },
 });

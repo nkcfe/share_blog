@@ -6,8 +6,8 @@ import { DarkTheme, LightTheme } from "./styles/theme";
 const App = () => {
   const [themeMode, setThemeMode] = useState("LightMode");
   return (
-    <ThemeProvider theme={themeMode ? LightTheme : DarkTheme}>
-      <Router />
+    <ThemeProvider theme={themeMode === "LightMode" ? LightTheme : DarkTheme}>
+      <Router setThemeMode={setThemeMode} themeMode={themeMode} />
     </ThemeProvider>
   );
 };

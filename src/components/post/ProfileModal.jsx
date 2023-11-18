@@ -15,8 +15,6 @@ const Base = styled.div`
   min-height: 300px;
 `;
 
-const Title = styled.div``;
-
 const Input = styled.input``;
 
 const ProfileModal = () => {
@@ -25,9 +23,7 @@ const ProfileModal = () => {
     if (!file) return;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.addEventListener("load",()=>{
-       
-    })
+    reader.addEventListener("load", () => {});
   };
   return (
     <Base>

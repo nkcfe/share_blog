@@ -6,7 +6,8 @@ import Button from "../common/Button";
 import FormInput from "./FormInput";
 import { checkRegex } from "../../common/checkRegex";
 import AlertMessage from "./AlertMessage";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { MoonLoader } from "react-spinners";
 
 const initialErrorData = {
   id: "",
@@ -43,7 +44,13 @@ const Form = () => {
 
   return (
     <Base>
-      {users.error && <AlertMessage errorMsg={users.error} />}
+      {users.isSuccess && (
+        <AlertMessage
+          Msg="로그인에 성공하였습니다. 메인페이지로 이동합니다."
+          type="success"
+        />
+      )}
+      {users.error && <AlertMessage Msg={users.error} />}
       <Title>환영합니다</Title>
       <SubTitle>회원 정보를 입력해주세요.</SubTitle>
       <FormContainer>
@@ -65,16 +72,22 @@ const Form = () => {
           inputId="password"
           placeholder={"비밀번호"}
         />
+
         <Button
           margin="25px 0"
           width="100%"
           height="50px"
           onClick={handleSubmit}
-          color="primary"
+          color="purple"
           fontSize="16px"
         >
-          로그인
+          {users.isLoading ? (
+            <MoonLoader size={20} color="#fff" />
+          ) : (
+            <span>로그인</span>
+          )}
         </Button>
+
         <LinktoSignup>
           회원이 아니신가요?{" "}
           <Link to="/register">
@@ -103,13 +116,13 @@ const Base = styled.div`
 const Title = styled.div`
   font-size: 26px;
   font-weight: bold;
-  color: ${({ theme }) => theme.color.fontColor};
+  color: ${({ theme }) => theme.color.font};
 `;
 
 const SubTitle = styled.div`
   font-size: 14px;
   font-weight: bold;
-  color: ${({ theme }) => theme.color.subFontColor};
+  color: ${({ theme }) => theme.color.subFont};
   margin-top: 15px;
 `;
 
@@ -124,6 +137,7 @@ const FormContainer = styled.form`
 const LinktoSignup = styled.div`
   margin-top: 15px;
   font-size: 14px;
+  color: ${({ theme }) => theme.color.font};
   span {
     font-size: 15px;
     font-weight: bold;
