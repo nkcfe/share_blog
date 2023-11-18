@@ -42,7 +42,7 @@ http://shareblog.s3-website.ap-northeast-2.amazonaws.com/
 
 - 댓글
   |기능|URL|Method|request|response|
-  |---|---|---|---|
+  |----|---|------|-------|--------|
   |댓글 가져오기|GET||{"authorId": "83c14c79-48e2-4ce6-a5cb-ee3e62d5b7c9","id": "bf410f35-2ccb-4b6d-aaa9-d7611fddbf19","author": "nkcfe","text": "gasdf","date": "2023.11.18"}|
   |댓글 등록|POST|id:string, comment:object|201|
   |댓글 삭제|DELETE|id:string|201|
